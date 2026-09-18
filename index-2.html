@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIKO GAME SHOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;
+  --panel:#12151b;
+  --panel-2:#181c24;
+  --line:#262b35;
+  --gold:#cba135;
+  --gold-bright:#e8c766;
+  --text:#eee9dc;
+  --text-dim:#9a9ea8;
+  --green:#4caf6d;
+  --yellow:#d9a53f;
+  --red:#e2574c;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Vazirmatn',sans-serif;
+  min-height:100vh;
+  line-height:1.6;
+}
+h1,h2,h3,h4,.display{
+  font-family:'Rajdhani','Vazirmatn',sans-serif;
+  font-weight:700;
+  letter-spacing:.3px;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;}
+input,textarea,select{font-family:inherit;}
+::selection{background:var(--gold);color:#0a0c10;}
+
+/* ---------- layout shell ---------- */
+#app{max-width:1160px;margin:0 auto;padding:0 18px 60px;}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(10,12,16,.97),rgba(10,12,16,.9));
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  margin:0 -18px 0;padding:0 18px;
+}
+.topbar-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:10px;}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.brand-mark{
+  width:38px;height:38px;border-radius:9px;
+  background:linear-gradient(135deg,#1a1e26,#0a0c10);
+  border:1px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Rajdhani';font-weight:700;color:var(--gold-bright);font-size:15px;
+}
+.brand-name{font-family:'Rajdhani';font-size:20px;font-weight:700;letter-spacing:1px;}
+.brand-name span{color:var(--gold-bright);}
+nav.mainnav{display:flex;gap:4px;flex-wrap:wrap;}
+.navbtn{
+  background:transparent;color:var(--text-dim);padding:8px 12px;border-radius:9px;font-size:14px;
+  display:flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap;
+}
+.navbtn:hover,.navbtn.active{background:var(--panel-2);color:var(--gold-bright);}
+@media (max-width:720px){
+  .topbar-inner{flex-wrap:wrap;}
+  nav.mainnav{width:100%;justify-content:space-between;padding-top:6px;}
+  .navbtn{flex:1;justify-content:center;padding:8px 6px;font-size:12.5px;}
+}
+
+/* ---------- generic ---------- */
+.section-title{font-size:26px;margin:26px 0 4px;}
+.section-sub{color:var(--text-dim);font-size:14px;margin-bottom:18px;}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 10px;border-radius:20px;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--text-dim);
+}
+.btn{
+  padding:11px 18px;border-radius:10px;font-size:14.5px;font-weight:600;
+  background:var(--panel-2);color:var(--text);border:1px solid var(--line);transition:.15s;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold-bright);}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  color:#1a1305;border:none;
+}
+.btn-gold:hover{filter:brightness(1.08);color:#1a1305;}
+.btn-ghost{background:transparent;border:1px solid var(--line);}
+.btn-danger{background:transparent;border:1px solid var(--red);color:var(--red);}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-block{width:100%;}
+.btn-sm{padding:7px 12px;font-size:13px;border-radius:8px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:6px;}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:11px 13px;color:var(--text);font-size:14.5px;outline:none;transition:.15s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold);}
+.field textarea{resize:vertical;min-height:80px;}
+.check{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-dim);}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);}
+.grid{display:grid;gap:16px;}
+.hidden{display:none !important;}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;}
+.status-yellow{background:var(--yellow);}
+.status-green{background:var(--green);}
+.status-red{background:var(--red);}
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:var(--panel-2);border:1px solid var(--gold);color:var(--text);
+  padding:12px 20px;border-radius:10px;font-size:14px;z-index:200;opacity:0;transition:.25s;
+  pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;bottom:32px;}
+
+/* ---------- hero ---------- */
+.hero{
+  margin:22px 0 10px;padding:34px 26px;border-radius:20px;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 85% 20%,rgba(203,161,53,.16),transparent 55%),
+             linear-gradient(160deg,#14171e,#0a0c10 70%);
+  border:1px solid var(--line);
+}
+.hero h1{font-size:34px;margin:0 0 8px;}
+.hero p{color:var(--text-dim);max-width:520px;margin:0 0 18px;font-size:15px;}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ---------- product grid ---------- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
+.toolbar input[type=text]{flex:1;min-width:180px;}
+.toolbar select{width:auto;min-width:120px;}
+.products-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));}
+.product-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column;transition:.15s;position:relative;
+}
+.product-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.product-cover{
+  height:130px;position:relative;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--cov1,#22270f),var(--cov2,#0a0c10));
+  border-bottom:1px solid var(--line);
+}
+.product-cover .glyph{font-family:'Rajdhani';font-weight:700;font-size:30px;color:rgba(232,199,102,.35);letter-spacing:2px;}
+.badge-row{position:absolute;top:8px;right:8px;display:flex;gap:6px;}
+.tag{font-size:10.5px;padding:3px 7px;border-radius:6px;font-weight:700;letter-spacing:.4px;}
+.tag-new{background:#2b3a2e;color:#7fd99a;}
+.tag-hot{background:#3a2323;color:#ef8a80;}
+.tag-sale{background:#3a2f16;color:var(--gold-bright);}
+.product-body{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.product-title{font-size:15.5px;font-weight:700;}
+.product-plat{font-size:12px;color:var(--text-dim);}
+.cap-rows{display:flex;flex-direction:column;gap:4px;margin:4px 0;font-size:13px;}
+.cap-row{display:flex;justify-content:space-between;color:var(--text-dim);}
+.cap-row.avail{color:var(--text);}
+.cap-row .price{color:var(--gold-bright);font-weight:600;}
+.cap-row .na{color:#5c5f66;}
+.product-views{font-size:11.5px;color:var(--text-dim);}
+.buy-btn{margin-top:auto;}
+
+/* ---------- modal / drawer ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(5,6,8,.72);z-index:100;
+  display:flex;align-items:flex-start;justify-content:center;padding:40px 14px;overflow-y:auto;
+}
+.modal{
+  background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:480px;width:100%;
+  padding:24px;position:relative;animation:pop .18s ease;
+}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:14px;left:14px;background:transparent;color:var(--text-dim);font-size:20px;}
+.modal-close:hover{color:var(--gold-bright);}
+.modal h3{margin:0 0 4px;font-size:20px;}
+.summary-box{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px;margin:14px 0;font-size:13.5px;}
+.summary-row{display:flex;justify-content:space-between;padding:3px 0;color:var(--text-dim);}
+.summary-row b{color:var(--text);}
+.copy-row{display:flex;gap:8px;align-items:center;}
+.copy-row input{flex:1;text-align:center;letter-spacing:1px;font-weight:600;}
+.steps{display:flex;gap:6px;margin-bottom:16px;}
+.step{flex:1;height:4px;border-radius:3px;background:var(--line);}
+.step.done{background:var(--gold);}
+
+/* ---------- order / chat ---------- */
+.order-card{padding:16px;margin-bottom:12px;}
+.order-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.order-id{font-family:'Rajdhani';font-weight:700;color:var(--gold-bright);}
+.chatbox{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:10px;background:var(--panel-2);border-radius:10px;margin:12px 0;}
+.msg{max-width:78%;padding:8px 12px;border-radius:12px;font-size:13.5px;}
+.msg.buyer{align-self:flex-start;background:var(--panel);border:1px solid var(--line);}
+.msg.admin{align-self:flex-end;background:#2a2412;border:1px solid var(--gold);color:var(--gold-bright);}
+.msg small{display:block;color:var(--text-dim);font-size:10.5px;margin-top:3px;}
+.chat-input{display:flex;gap:8px;}
+.chat-input input{flex:1;}
+
+/* ---------- admin ---------- */
+.admin-shell{display:grid;grid-template-columns:190px 1fr;gap:20px;margin-top:20px;}
+.admin-side{display:flex;flex-direction:column;gap:4px;}
+.admin-side button{
+  text-align:right;background:transparent;color:var(--text-dim);padding:10px 12px;border-radius:9px;font-size:14px;
+}
+.admin-side button.active,.admin-side button:hover{background:var(--panel-2);color:var(--gold-bright);}
+.stat-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+.stat-card{padding:16px;}
+.stat-num{font-family:'Rajdhani';font-size:26px;font-weight:700;color:var(--gold-bright);}
+.stat-label{font-size:12.5px;color:var(--text-dim);margin-top:2px;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th,td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--line);}
+th{color:var(--text-dim);font-weight:600;font-size:12.5px;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.row-actions{display:flex;gap:6px;}
+.cap-editor{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0;}
+.cap-editor .capbox{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:10px;}
+.cap-editor .capbox h4{margin:0 0 8px;font-size:13px;color:var(--text-dim);}
+.empty{text-align:center;color:var(--text-dim);padding:40px 10px;font-size:14px;}
+.small-note{font-size:12px;color:var(--text-dim);margin-top:4px;}
+.warn-box{
+  background:#2a1e12;border:1px solid #6b4a1c;color:#e8c37a;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px;
+}
+@media (max-width:720px){
+  .admin-shell{grid-template-columns:1fr;}
+  .admin-side{flex-direction:row;overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar"><div class="topbar-inner">
+    <div class="brand" onclick="go('home')">
+      <div class="brand-mark">TK</div>
+      <div class="brand-name">TIKO <span>GAME SHOP</span></div>
+    </div>
+    <nav class="mainnav" id="mainnav"></nav>
+  </div></div>
+
+  <div id="view"></div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   DATA LAYER
+============================================================ */
+const STORE_KEY = 'tiko_store_v1';
+
+function defaultStore(){
+  return {
+    settings:{
+      cardNumber:'6037-9917-1234-5678',
+      cardHolder:'علی محمدی',
+      iban:'IR000000000000000000000000',
+      supportId:'@TikoSupport',
+      paymentDesc:'لطفاً مبلغ دقیق سفارش را به شماره کارت بالا واریز کنید و تصویر رسید را ثبت کنید.'
+    },
+    products:[
+      {id:'p1', title:'EA SPORTS FC 26', platform:'PS5', desc:'جدیدترین نسخه فوتبال با گرافیک به‌روز و لیگ‌های کامل.', views:124, tags:['HOT'], hidden:false, cov:['#2a3d1f','#0a0c10'],
+        caps:{1:{available:true,price:450000},2:{available:true,price:300000},3:{available:false,price:null}}},
+      {id:'p2', title:'GOD OF WAR RAGNARÖK', platform:'PS5', desc:'ادامه ماجراهای کریتوس در دنیای اسطوره‌های نورس.', views:98, tags:['BEST SELLER'], hidden:false, cov:['#1f2536','#0a0c10'],
+        caps:{1:{available:true,price:520000},2:{available:false,price:null},3:{available:true,price:250000}}},
+      {id:'p3', title:'GTA V', platform:'PS4', desc:'کلاسیک همیشگی، دنیای باز لس‌سانتوس.', views:301, tags:['SALE'], hidden:false, cov:['#3a2a1f','#0a0c10'],
+        caps:{1:{available:true,price:500000},2:{available:true,price:320000},3:{available:true,price:180000}}},
+      {id:'p4', title:'SPIDER-MAN 2', platform:'PS5', desc:'نیویورک را با دو اسپایدرمن بگردید.', views:76, tags:['NEW'], hidden:false, cov:['#2a1f36','#0a0c10'],
+        caps:{1:{available:true,price:480000},2:{available:false,price:null},3:{available:false,price:null}}}
+    ],
+    orders:[],
+    orderSeq:1047,
+    adminSession:false
+  };
+}
+
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) { const d=defaultStore(); saveStore(d); return d; }
+    return JSON.parse(raw);
+  }catch(e){ const d=defaultStore(); saveStore(d); return d; }
+}
+function saveStore(s){ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+
+let DB = loadStore();
+let session = { buyerName:'', buyerPhone:'', isAdmin:false, currentOrderDraft:null };
+
+function persist(){ saveStore(DB); }
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function money(n){ return n==null? '—' : Number(n).toLocaleString('fa-IR')+' تومان'; }
+function esc(s){ return (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function newOrderId(){ DB.orderSeq++; persist(); return 'TK-'+DB.orderSeq; }
+function findProduct(id){ return DB.products.find(p=>p.id===id); }
+function findOrder(id){ return DB.orders.find(o=>o.id===id); }
+function copyText(txt){
+  navigator.clipboard?.writeText(txt).then(()=>toast('کپی شد ✅')).catch(()=>toast('کپی نشد'));
+}
+
+/* ============================================================
+   ROUTER
+============================================================ */
+let route = 'home';
+let routeParam = null;
+
+function go(r, param=null){
+  route = r; routeParam = param;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderNav(){
+  const items = [
+    ['home','🏠 خانه'],
+    ['orders','📦 سفارش‌های من'],
+    ['admin','🔐 پنل ادمین'],
+  ];
+  document.getElementById('mainnav').innerHTML = items.map(([r,label])=>
+    `<button class="navbtn ${route===r?'active':''}" onclick="go('${r}')">${label}</button>`
+  ).join('');
+}
+
+/* ============================================================
+   VIEWS: HOME
+============================================================ */
+let filters = { q:'', platform:'all', sort:'default' };
+
+function viewHome(){
+  const platforms = ['all','PS4','PS5'];
+  let list = DB.products.filter(p=>!p.hidden);
+  if(filters.q.trim()) list = list.filter(p=>p.title.toLowerCase().includes(filters.q.trim().toLowerCase()));
+  if(filters.platform!=='all') list = list.filter(p=>p.platform===filters.platform);
+  if(filters.sort==='cheap') list.sort((a,b)=>minPrice(a)-minPrice(b));
+  if(filters.sort==='expensive') list.sort((a,b)=>minPrice(b)-minPrice(a));
+
+  return `
+    <div class="hero">
+      <h1>فروشگاه بازی TIKO</h1>
+      <p>خرید امن بازی‌های PS4 و PS5 با پرداخت کارت‌به‌کارت و پیگیری سفارش در همان سایت.</p>
+      <div class="hero-tags">
+        <span class="pill">🎮 PS4 / PS5</span>
+        <span class="pill">💳 کارت‌به‌کارت</span>
+        <span class="pill">💬 چت پشتیبانی هر سفارش</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" placeholder="🔍 نام بازی را جستجو کنید..." value="${esc(filters.q)}" oninput="filters.q=this.value; renderView();">
+      <select onchange="filters.platform=this.value; renderView();">
+        ${platforms.map(p=>`<option value="${p}" ${filters.platform===p?'selected':''}>${p==='all'?'همه پلتفرم‌ها':p}</option>`).join('')}
+      </select>
+      <select onchange="filters.sort=this.value; renderView();">
+        <option value="default" ${filters.sort==='default'?'selected':''}>پیش‌فرض</option>
+        <option value="cheap" ${filters.sort==='cheap'?'selected':''}>ارزان‌ترین</option>
+        <option value="expensive" ${filters.sort==='expensive'?'selected':''}>گران‌ترین</option>
+      </select>
+    </div>
+
+    <div class="grid products-grid">
+      ${list.length? list.map(productCard).join('') : `<div class="empty">هیچ بازی‌ای با این فیلتر پیدا نشد.</div>`}
+    </div>
+  `;
+}
+
+function minPrice(p){
+  const prices = Object.values(p.caps).filter(c=>c.available).map(c=>c.price);
+  return prices.length? Math.min(...prices) : Infinity;
+}
+
+function productCard(p){
+  const tagMap = {NEW:'tag-new', HOT:'tag-hot', SALE:'tag-sale', 'BEST SELLER':'tag-hot'};
+  const capLabels = {1:'ظرفیت ۱',2:'ظرفیت ۲',3:'ظرفیت ۳'};
+  const anyAvailable = Object.values(p.caps).some(c=>c.available);
+  return `
+    <div class="product-card">
+      <div class="product-cover" style="--cov1:${p.cov[0]};--cov2:${p.cov[1]}">
+        <div class="glyph">${p.platform}</div>
+        <div class="badge-row">${(p.tags||[]).map(t=>`<span class="tag ${tagMap[t]||''}">${t}</span>`).join('')}</div>
+      </div>
+      <div class="product-body">
+        <div class="product-title">${esc(p.title)}</div>
+        <div class="product-plat">${p.platform}</div>
+        <div class="cap-rows">
+          ${[1,2,3].map(k=>{
+            const c=p.caps[k];
+            return `<div class="cap-row ${c.available?'avail':''}">
+              <span>${capLabels[k]}</span>
+              <span class="${c.available?'price':'na'}">${c.available? money(c.price):'ناموجود'}</span>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="product-views">🔥 ${p.views} نفر این محصول را دیده‌اند</div>
+        <button class="btn btn-gold buy-btn" ${anyAvailable?'':'disabled style="opacity:.5;cursor:not-allowed"'} onclick="openBuy('${p.id}')">🛒 خرید</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   BUY FLOW (overlay-based, layered on top of current view)
+============================================================ */
+let buyState = null; // {productId, cap, step}
+
+function openBuy(productId){
+  const p = findProduct(productId);
+  p.views++; persist();
+  const firstAvailCap = [1,2,3].find(k=>p.caps[k].available);
+  buyState = { productId, cap:firstAvailCap, step:1, receiptData:null };
+  renderOverlay();
+}
+function closeOverlay(){
+  buyState = null;
+  document.getElementById('overlay-root').innerHTML='';
+}
+function renderOverlay(){
+  const root = document.getElementById('overlay-root');
+  if(!buyState){ root.innerHTML=''; return; }
+  const p = findProduct(buyState.productId);
+  const capLabels = {1:'ظرفیت ۱',2:'ظرفیت ۲',3:'ظرفیت ۳'};
+  const price = p.caps[buyState.cap]?.price;
+
+  let body = '';
+  if(buyState.step===1){
+    body = `
+      <h3>خرید ${esc(p.title)}</h3>
+      <div class="section-sub">${p.platform}</div>
+      <div class="field">
+        <label>انتخاب ظرفیت</label>
+        <select onchange="buyState.cap=this.value; renderOverlay();">
+          ${[1,2,3].map(k=>`<option value="${k}" ${!p.caps[k].available?'disabled':''} ${String(buyState.cap)===String(k)?'selected':''}>${capLabels[k]} ${p.caps[k].available? '— '+money(p.caps[k].price) : '(ناموجود)'}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field"><label>نام و نام خانوادگی</label><input id="bf-name" type="text" placeholder="مثلاً علی رضایی"></div>
+      <div class="field"><label>شماره تماس</label><input id="bf-phone" type="text" placeholder="09xxxxxxxxx"></div>
+      <label class="check"><input type="checkbox" id="bf-rules"> قوانین خرید را مطالعه کرده‌ام</label>
+      <button class="btn btn-gold btn-block" style="margin-top:16px" onclick="submitBuyerInfo()">ادامه پرداخت →</button>
+    `;
+  } else if(buyState.step===2){
+    body = `
+      <h3>پرداخت کارت‌به‌کارت</h3>
+      <div class="summary-box">
+        <div class="summary-row"><span>مبلغ قابل پرداخت</span><b style="color:var(--gold-bright)">${money(price)}</b></div>
+      </div>
+      <div class="field">
+        <label>شماره کارت فروشگاه</label>
+        <div class="copy-row">
+          <input type="text" value="${esc(DB.settings.cardNumber)}" readonly>
+          <button class="btn btn-sm" onclick="copyText('${esc(DB.settings.cardNumber)}')">📋 کپی</button>
+        </div>
+        <div class="small-note">به نام: ${esc(DB.settings.cardHolder)}</div>
+      </div>
+      <div class="small-note" style="margin-bottom:14px">${esc(DB.settings.paymentDesc)}</div>
+      <div class="field">
+        <label>تصویر رسید پرداخت</label>
+        <input type="file" accept="image/*" onchange="handleReceiptUpload(this)">
+        <div id="receipt-preview" class="small-note"></div>
+      </div>
+      <button class="btn btn-gold btn-block" onclick="submitReceipt()">ثبت پرداخت</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="buyState.step=1; renderOverlay();">← بازگشت</button>
+    `;
+  } else if(buyState.step===3){
+    body = `
+      <h3>✅ سفارش ثبت شد</h3>
+      <div class="summary-box">
+        <div class="summary-row"><span>شماره سفارش</span><b>${buyState.orderId}</b></div>
+        <div class="summary-row"><span>بازی</span><b>${esc(p.title)}</b></div>
+        <div class="summary-row"><span>ظرفیت</span><b>${capLabels[buyState.cap]}</b></div>
+        <div class="summary-row"><span>مبلغ</span><b>${money(price)}</b></div>
+        <div class="summary-row"><span>وضعیت</span><b><span class="status-dot status-yellow"></span>در انتظار بررسی پرداخت</b></div>
+      </div>
+      <div class="small-note">می‌توانید وضعیت سفارش را از بخش «سفارش‌های من» پیگیری کنید و در همان‌جا با پشتیبانی گفتگو کنید.</div>
+      <button class="btn btn-gold btn-block" style="margin-top:16px" onclick="closeOverlay(); go('orders');">مشاهده سفارش‌های من</button>
+    `;
+  }
+
+  root.innerHTML = `
+    <div class="overlay" onclick="if(event.target===this) closeOverlay()">
+      <div class="modal">
+        <button class="modal-close" onclick="closeOverlay()">✕</button>
+        <div class="steps">
+          <div class="step ${buyState.step>=1?'done':''}"></div>
+          <div class="step ${buyState.step>=2?'done':''}"></div>
+          <div class="step ${buyState.step>=3?'done':''}"></div>
+        </div>
+        ${body}
+      </div>
+    </div>
+  `;
+}
+
+function submitBuyerInfo(){
+  const name = document.getElementById('bf-name').value.trim();
+  const phone = document.getElementById('bf-phone').value.trim();
+  const rules = document.getElementById('bf-rules').checked;
+  if(!name || !phone){ toast('نام و شماره تماس را وارد کنید'); return; }
+  if(!rules){ toast('لطفاً قوانین خرید را تایید کنید'); return; }
+  session.buyerName = name; session.buyerPhone = phone;
+  buyState.step = 2;
+  renderOverlay();
+}
+
+function handleReceiptUpload(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    buyState.receiptData = e.target.result;
+    document.getElementById('receipt-preview').textContent = '✅ رسید انتخاب شد: '+file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitReceipt(){
+  if(!buyState.receiptData){ toast('ابتدا تصویر رسید را انتخاب کنید'); return; }
+  const p = findProduct(buyState.productId);
+  const price = p.caps[buyState.cap].price;
+  const id = newOrderId();
+  const order = {
+    id, productId:p.id, productTitle:p.title, platform:p.platform,
+    cap:buyState.cap, price, buyerName:session.buyerName, buyerPhone:session.buyerPhone,
+    receipt:buyState.receiptData, status:'pending', adminNote:'', delivery:null,
+    createdAt:new Date().toISOString(),
+    messages:[{sender:'buyer', text:'رسید پرداخت ارسال شد.', img:buyState.receiptData, at:new Date().toISOString()}]
+  };
+  DB.orders.unshift(order);
+  persist();
+  buyState.orderId = id;
+  buyState.step = 3;
+  renderOverlay();
+}
+
+/* ============================================================
+   VIEW: MY ORDERS (buyer side, matched by phone number in this session)
+============================================================ */
+function viewOrders(){
+  const myOrders = DB.orders.filter(o=> o.buyerPhone===session.buyerPhone && session.buyerPhone);
+  if(!session.buyerPhone){
+    return `
+      <h2 class="section-title">📦 سفارش‌های من</h2>
+      <div class="card" style="padding:20px;max-width:420px">
+        <div class="section-sub">برای دیدن سفارش‌هایتان شماره تماسی که هنگام خرید وارد کردید را وارد کنید.</div>
+        <div class="field"><input id="lookup-phone" type="text" placeholder="09xxxxxxxxx"></div>
+        <button class="btn btn-gold btn-block" onclick="session.buyerPhone=document.getElementById('lookup-phone').value.trim(); renderView();">پیگیری سفارش‌ها</button>
+      </div>
+    `;
+  }
+  if(!myOrders.length){
+    return `<h2 class="section-title">📦 سفارش‌های من</h2><div class="empty">سفارشی با این شماره تماس پیدا نشد.</div>
+    <button class="btn btn-ghost" onclick="session.buyerPhone=''; renderView();">تغییر شماره</button>`;
+  }
+  return `
+    <h2 class="section-title">📦 سفارش‌های من</h2>
+    <div class="section-sub">شماره تماس: ${esc(session.buyerPhone)} — <a onclick="session.buyerPhone=''; renderView();" style="color:var(--gold-bright);cursor:pointer">تغییر</a></div>
+    ${myOrders.map(o=>orderCardBuyer(o)).join('')}
+  `;
+}
+
+const statusMeta = {
+  pending:{dot:'status-yellow', label:'در انتظار بررسی پرداخت'},
+  approved:{dot:'status-green', label:'پرداخت تأیید شد'},
+  rejected:{dot:'status-red', label:'پرداخت رد شد'},
+  delivered:{dot:'status-green', label:'تحویل شده'}
+};
+
+function orderCardBuyer(o){
+  const meta = statusMeta[o.status];
+  const capLabels = {1:'ظرفیت ۱',2:'ظرفیت ۲',3:'ظرفیت ۳'};
+  return `
+    <div class="card order-card">
+      <div class="order-top">
+        <span class="order-id">سفارش #${o.id}</span>
+        <span class="pill"><span class="status-dot ${meta.dot}"></span>${meta.label}</span>
+      </div>
+      <div class="summary-row"><span>بازی</span><b>${esc(o.productTitle)} (${o.platform})</b></div>
+      <div class="summary-row"><span>ظرفیت</span><b>${capLabels[o.cap]}</b></div>
+      <div class="summary-row"><span>مبلغ</span><b>${money(o.price)}</b></div>
+      ${o.status==='rejected' ? `<div class="small-note" style="color:var(--red)">دلیل رد: ${esc(o.adminNote||'—')}</div>` : ''}
+      ${o.delivery ? `
+        <div class="summary-box" style="margin-top:10px">
+          <div class="summary-row"><span>Email</span><b>${esc(o.delivery.email)}</b></div>
+          <div class="summary-row"><span>Password</span><b>${esc(o.delivery.password)}</b></div>
+          <div class="small-note">${esc(o.delivery.instructions)}</div>
+        </div>` : ''}
+      <div class="chatbox" id="chat-${o.id}">
+        ${o.messages.map(m=>chatBubble(m)).join('')}
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chat-in-${o.id}" placeholder="پیام به پشتیبانی...">
+        <button class="btn btn-sm btn-gold" onclick="sendChat('${o.id}','buyer')">ارسال</button>
+      </div>
+      <div class="small-note">پشتیبانی: ${esc(DB.settings.supportId)}</div>
+    </div>
+  `;
+}
+
+function chatBubble(m){
+  const time = new Date(m.at).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
+  return `<div class="msg ${m.sender}">
+    ${m.img? `<img src="${m.img}" style="max-width:100%;border-radius:8px;margin-bottom:4px;display:block">`:''}
+    ${esc(m.text)}
+    <small>${m.sender==='admin'?'ادمین':'شما'} • ${time}</small>
+  </div>`;
+}
+
+function sendChat(orderId, sender){
+  const input = document.getElementById('chat-in-'+orderId);
+  const text = input.value.trim();
+  if(!text) return;
+  const o = findOrder(orderId);
+  o.messages.push({sender, text, img:null, at:new Date().toISOString()});
+  persist();
+  renderView();
+  setTimeout(()=>{ const box=document.getElementById('chat-'+orderId); if(box) box.scrollTop=box.scrollHeight; },0);
+}
+
+/* ============================================================
+   VIEW: ADMIN
+============================================================ */
+let adminTab = 'overview';
+
+function viewAdmin(){
+  if(!session.isAdmin) return adminLogin();
+  return `
+    <h2 class="section-title">👑 پنل مدیریت</h2>
+    <div class="admin-shell">
+      <div class="admin-side">
+        ${[['overview','📊 داشبورد'],['products','📦 محصولات'],['orders','🧾 سفارش‌ها'],['settings','💳 تنظیمات پرداخت']].map(([k,l])=>
+          `<button class="${adminTab===k?'active':''}" onclick="adminTab='${k}'; renderView();">${l}</button>`
+        ).join('')}
+        <button style="margin-top:14px;color:var(--red)" onclick="session.isAdmin=false; go('home');">خروج از پنل</button>
+      </div>
+      <div>
+        ${adminTab==='overview'? adminOverview() : ''}
+        ${adminTab==='products'? adminProducts() : ''}
+        ${adminTab==='orders'? adminOrders() : ''}
+        ${adminTab==='settings'? adminSettings() : ''}
+      </div>
+    </div>
+  `;
+}
+
+function adminLogin(){
+  return `
+    <div class="card" style="max-width:380px;margin:40px auto;padding:26px">
+      <h3 style="text-align:center;margin-bottom:2px">TIKO ADMIN PANEL</h3>
+      <div class="section-sub" style="text-align:center">ورود مدیر فروشگاه</div>
+      <div class="warn-box">⚠️ رمز پیش‌فرض (123) فقط برای نسخه آزمایشی است. پیش از انتشار عمومی، حتماً رمز قوی و ورود امن (رمزنگاری، محدودیت تلاش ورود) جایگزین کنید.</div>
+      <div class="field"><label>نام کاربری</label><input id="ad-user" type="text" placeholder="admin"></div>
+      <div class="field"><label>رمز عبور</label><input id="ad-pass" type="password" placeholder="••••"></div>
+      <button class="btn btn-gold btn-block" onclick="adminTryLogin()">ورود</button>
+    </div>
+  `;
+}
+function adminTryLogin(){
+  const u = document.getElementById('ad-user').value.trim();
+  const p = document.getElementById('ad-pass').value.trim();
+  if(u==='admin' && p==='123'){ session.isAdmin=true; adminTab='overview'; toast('خوش آمدید'); renderView(); }
+  else toast('نام کاربری یا رمز اشتباه است');
+}
+
+function adminOverview(){
+  const total = DB.orders.length;
+  const pending = DB.orders.filter(o=>o.status==='pending').length;
+  const approved = DB.orders.filter(o=>o.status==='approved'||o.status==='delivered').length;
+  const rejected = DB.orders.filter(o=>o.status==='rejected').length;
+  const todaySales = DB.orders.filter(o=>{
+    const d=new Date(o.createdAt); const t=new Date();
+    return d.toDateString()===t.toDateString() && o.status!=='rejected';
+  }).reduce((s,o)=>s+o.price,0);
+  const stats = [
+    ['📦 کل سفارش‌ها', total],
+    ['🟡 در انتظار بررسی', pending],
+    ['🟢 تأیید شده', approved],
+    ['🔴 رد شده', rejected],
+    ['🎮 تعداد محصولات', DB.products.length],
+    ['💰 فروش امروز', money(todaySales)],
+  ];
+  return `<div class="grid stat-grid">
+    ${stats.map(([l,v])=>`<div class="card stat-card"><div class="stat-num">${v}</div><div class="stat-label">${l}</div></div>`).join('')}
+  </div>`;
+}
+
+function adminProducts(){
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="margin:0">مدیریت محصولات</h3>
+      <button class="btn btn-gold btn-sm" onclick="openProductEditor(null)">➕ افزودن آگهی</button>
+    </div>
+    <div id="product-editor-slot"></div>
+    <table>
+      <tr><th>بازی</th><th>پلتفرم</th><th>وضعیت</th><th>بازدید</th><th></th></tr>
+      ${DB.products.map(p=>`
+        <tr>
+          <td>${esc(p.title)}</td>
+          <td>${p.platform}</td>
+          <td>${p.hidden? '🙈 مخفی':'👁️ نمایش'}</td>
+          <td>${p.views}</td>
+          <td class="row-actions">
+            <button class="btn btn-sm" onclick="openProductEditor('${p.id}')">ویرایش</button>
+            <button class="btn btn-sm" onclick="toggleHide('${p.id}')">${p.hidden?'نمایش':'مخفی'}</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}')">حذف</button>
+          </td>
+        </tr>
+      `).join('')}
+    </table>
+  `;
+}
+
+function toggleHide(id){ const p=findProduct(id); p.hidden=!p.hidden; persist(); renderView(); }
+function deleteProduct(id){
+  if(!confirm('این آگهی حذف شود؟')) return;
+  DB.products = DB.products.filter(p=>p.id!==id); persist(); renderView();
+}
+
+let editingProduct = null;
+function openProductEditor(id){
+  editingProduct = id? JSON.parse(JSON.stringify(findProduct(id))) : {
+    id:'p'+Date.now(), title:'', platform:'PS5', desc:'', views:0, tags:[], hidden:false,
+    cov:['#22270f','#0a0c10'], caps:{1:{available:true,price:0},2:{available:false,price:null},3:{available:false,price:null}}
+  };
+  renderProductEditor();
+}
+function renderProductEditor(){
+  const slot = document.getElementById('product-editor-slot');
+  if(!editingProduct){ slot.innerHTML=''; return; }
+  const ep = editingProduct;
+  slot.innerHTML = `
+    <div class="card" style="padding:18px;margin-bottom:16px">
+      <h4 style="margin-top:0">${DB.products.find(p=>p.id===ep.id)?'ویرایش':'افزودن'} محصول</h4>
+      <div class="field"><label>نام بازی</label><input id="pe-title" type="text" value="${esc(ep.title)}"></div>
+      <div class="field"><label>پلتفرم</label>
+        <select id="pe-platform">
+          <option value="PS4" ${ep.platform==='PS4'?'selected':''}>PS4</option>
+          <option value="PS5" ${ep.platform==='PS5'?'selected':''}>PS5</option>
+        </select>
+      </div>
+      <div class="field"><label>توضیحات</label><textarea id="pe-desc">${esc(ep.desc)}</textarea></div>
+      <div class="field"><label>برچسب (اختیاری)</label>
+        <select id="pe-tag">
+          <option value="">بدون برچسب</option>
+          ${['NEW','HOT','SALE','BEST SELLER'].map(t=>`<option ${ep.tags&&ep.tags[0]===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="cap-editor">
+        ${[1,2,3].map(k=>`
+          <div class="capbox">
+            <h4>ظرفیت ${k}</h4>
+            <label class="check"><input type="checkbox" id="pe-cap${k}-avail" ${ep.caps[k].available?'checked':''}> موجود</label>
+            <div class="field" style="margin-top:8px"><input id="pe-cap${k}-price" type="number" placeholder="قیمت (تومان)" value="${ep.caps[k].price||''}"></div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-gold" onclick="saveProductEditor()">💾 انتشار آگهی</button>
+        <button class="btn btn-ghost" onclick="editingProduct=null; renderProductEditor();">انصراف</button>
+      </div>
+    </div>
+  `;
+}
+function saveProductEditor(){
+  const ep = editingProduct;
+  ep.title = document.getElementById('pe-title').value.trim();
+  ep.platform = document.getElementById('pe-platform').value;
+  ep.desc = document.getElementById('pe-desc').value.trim();
+  const tag = document.getElementById('pe-tag').value;
+  ep.tags = tag? [tag] : [];
+  if(!ep.title){ toast('نام بازی را وارد کنید'); return; }
+  [1,2,3].forEach(k=>{
+    const avail = document.getElementById(`pe-cap${k}-avail`).checked;
+    const price = Number(document.getElementById(`pe-cap${k}-price`).value)||0;
+    ep.caps[k] = {available:avail, price: avail? price : null};
+  });
+  const idx = DB.products.findIndex(p=>p.id===ep.id);
+  if(idx>=0) DB.products[idx]=ep; else DB.products.push(ep);
+  persist();
+  editingProduct = null;
+  toast('ذخیره شد ✅');
+  renderView();
+}
+
+function adminOrders(){
+  if(!DB.orders.length) return `<div class="empty">هنوز سفارشی ثبت نشده است.</div>`;
+  return DB.orders.map(o=>adminOrderCard(o)).join('');
+}
+
+function adminOrderCard(o){
+  const meta = statusMeta[o.status];
+  const capLabels = {1:'ظرفیت ۱',2:'ظرفیت ۲',3:'ظرفیت ۳'};
+  return `
+    <div class="card order-card">
+      <div class="order-top">
+        <span class="order-id">#${o.id}</span>
+        <span class="pill"><span class="status-dot ${meta.dot}"></span>${meta.label}</span>
+      </div>
+      <div class="summary-row"><span>خریدار</span><b>${esc(o.buyerName)} — ${esc(o.buyerPhone)}</b></div>
+      <div class="summary-row"><span>بازی</span><b>${esc(o.productTitle)} (${o.platform})</b></div>
+      <div class="summary-row"><span>ظرفیت</span><b>${capLabels[o.cap]}</b></div>
+      <div class="summary-row"><span>مبلغ</span><b>${money(o.price)}</b></div>
+      ${o.receipt? `<div class="small-note">تصویر رسید:</div><img src="${o.receipt}" style="max-width:160px;border-radius:8px;margin:6px 0;display:block">`:''}
+      ${o.status==='pending' ? `
+        <div style="display:flex;gap:8px;margin:10px 0">
+          <button class="btn btn-sm btn-gold" onclick="approveOrder('${o.id}')">✅ تأیید پرداخت</button>
+          <button class="btn btn-sm btn-danger" onclick="rejectOrder('${o.id}')">❌ رد پرداخت</button>
+        </div>` : ''}
+      ${(o.status==='approved') ? `
+        <div class="card" style="padding:12px;background:var(--panel-2);margin:10px 0">
+          <div class="small-note" style="margin-bottom:8px">🔐 تحویل اطلاعات بازی</div>
+          <div class="field"><input id="del-email-${o.id}" type="text" placeholder="Email / Gmail"></div>
+          <div class="field"><input id="del-pass-${o.id}" type="text" placeholder="Password"></div>
+          <div class="field"><textarea id="del-guide-${o.id}" placeholder="راهنمای ورود..."></textarea></div>
+          <button class="btn btn-sm btn-gold" onclick="deliverOrder('${o.id}')">📨 ارسال اطلاعات به خریدار</button>
+        </div>` : ''}
+      <div class="chatbox" id="chat-${o.id}">${o.messages.map(m=>chatBubble(m)).join('')}</div>
+      <div class="chat-input">
+        <input type="text" id="chat-in-${o.id}" placeholder="پاسخ به خریدار...">
+        <button class="btn btn-sm btn-gold" onclick="sendChat('${o.id}','admin')">ارسال</button>
+      </div>
+    </div>
+  `;
+}
+function approveOrder(id){ const o=findOrder(id); o.status='approved'; persist(); renderView(); toast('پرداخت تأیید شد'); }
+function rejectOrder(id){
+  const reason = prompt('دلیل رد پرداخت را وارد کنید:', 'تصویر رسید خوانا نیست.');
+  if(reason===null) return;
+  const o=findOrder(id); o.status='rejected'; o.adminNote=reason; persist(); renderView();
+}
+function deliverOrder(id){
+  const email = document.getElementById('del-email-'+id).value.trim();
+  const pass = document.getElementById('del-pass-'+id).value.trim();
+  const guide = document.getElementById('del-guide-'+id).value.trim();
+  if(!email||!pass){ toast('ایمیل و رمز را وارد کنید'); return; }
+  const o = findOrder(id);
+  o.delivery = {email,password:pass,instructions:guide};
+  o.status='delivered';
+  o.messages.push({sender:'admin', text:'اطلاعات حساب ارسال شد. لطفاً بخش «تحویل» سفارش را بررسی کنید.', img:null, at:new Date().toISOString()});
+  persist(); renderView(); toast('اطلاعات ارسال شد ✅');
+}
+
+function adminSettings(){
+  const s = DB.settings;
+  return `
+    <h3 style="margin-top:0">💳 تنظیمات پرداخت و پشتیبانی</h3>
+    <div class="card" style="padding:18px;max-width:460px">
+      <div class="field"><label>شماره کارت</label><input id="set-card" type="text" value="${esc(s.cardNumber)}"></div>
+      <div class="field"><label>نام صاحب کارت</label><input id="set-holder" type="text" value="${esc(s.cardHolder)}"></div>
+      <div class="field"><label>شماره شبا (IBAN)</label><input id="set-iban" type="text" value="${esc(s.iban)}"></div>
+      <div class="field"><label>آیدی پشتیبانی</label><input id="set-support" type="text" value="${esc(s.supportId)}"></div>
+      <div class="field"><label>توضیحات پرداخت</label><textarea id="set-desc">${esc(s.paymentDesc)}</textarea></div>
+      <button class="btn btn-gold btn-block" onclick="saveSettings()">ذخیره اطلاعات پرداخت</button>
+      <div class="small-note">با تغییر شماره کارت یا آیدی پشتیبانی، نیازی به طراحی دوباره سایت نیست — همه صفحات به‌صورت خودکار به‌روزرسانی می‌شوند.</div>
+    </div>
+  `;
+}
+function saveSettings(){
+  DB.settings.cardNumber = document.getElementById('set-card').value.trim();
+  DB.settings.cardHolder = document.getElementById('set-holder').value.trim();
+  DB.settings.iban = document.getElementById('set-iban').value.trim();
+  DB.settings.supportId = document.getElementById('set-support').value.trim();
+  DB.settings.paymentDesc = document.getElementById('set-desc').value.trim();
+  persist();
+  toast('تنظیمات ذخیره شد ✅');
+  renderView();
+}
+
+/* ============================================================
+   MAIN RENDER
+============================================================ */
+function renderView(){
+  renderNav();
+  let html = '';
+  if(route==='home') html = viewHome();
+  else if(route==='orders') html = viewOrders();
+  else if(route==='admin') html = viewAdmin();
+  document.getElementById('view').innerHTML = html + `<div id="overlay-root"></div>`;
+  if(buyState) renderOverlay();
+}
+function render(){ renderView(); }
+
+render();
+</script>
+</body>
+</html>
